@@ -8,9 +8,9 @@ const exitIfEmpty = async (path: string) => {
   if (!stats || stats.size === 0) process.exit(0)
 }
 
-const MAX_OLD_OPERATIONS = 5
-const WHISPER_MODEL_PATH = process.env.WHISPER_MODEL_PATH || join(homedir(), 'ggml-large-v3-turbo-q5_0.bin')
-const WHISPER_VAD_MODEL_PATH = process.env.WHISPER_VAD_MODEL_PATH || join(homedir(), 'ggml-silero-v6.2.0.bin')
+const MAX_OLD_OPERATIONS = Number(process.env.TALKIE_MAX_OLD_OPERATIONS || 5)
+const WHISPER_MODEL_PATH = process.env.TALKIE_WHISPER_MODEL_PATH || join(homedir(), 'ggml-large-v3-turbo-q5_0.bin')
+const WHISPER_VAD_MODEL_PATH = process.env.TALKIE_WHISPER_VAD_MODEL_PATH || join(homedir(), 'ggml-silero-v6.2.0.bin')
 
 // YYYY-MM-DD-HH-mm-SS
 const operationId = new Date().toISOString().slice(0, 19).replaceAll(/\D/g, '-')
