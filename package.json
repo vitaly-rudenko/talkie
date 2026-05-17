@@ -1,15 +1,21 @@
 {
-  "name": "talkie",
+  "name": "@vitalyrudenko/talkie",
   "version": "1.0.0",
   "description": "Record and transcribe audio",
-  "main": "src/app.ts",
-  "scripts": {},
   "keywords": [
     "sox",
     "whisper.cpp"
   ],
   "author": "Vitaly Rudenko <maurice.dederick@gmail.com>",
   "license": "MIT",
+  "main": "talkie.mjs",
+  "files": [
+    "talkie.mjs"
+  ],
+  "scripts": {},
+  "bin": {
+    "talkie": "talkie.mjs"
+  },
   "type": "module",
   "devDependencies": {
     "@types/node": "^25.8.0",

@@ -1,9 +1,12 @@
+#!/usr/bin/env node
+
 import { spawn } from 'node:child_process'
 import { mkdir, open, readdir, readFile, rm, stat } from 'node:fs/promises'
 import { homedir } from 'node:os'
 import { join } from 'node:path'
 
-const exitIfEmpty = async (path: string) => {
+/** @param {string} path */
+const exitIfEmpty = async path => {
   const stats = await stat(path).catch(() => null)
   if (!stats || stats.size === 0) process.exit(0)
 }
