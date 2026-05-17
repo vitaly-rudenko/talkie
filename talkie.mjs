@@ -2,7 +2,6 @@
 
 import { spawn } from 'node:child_process'
 import { mkdir, open, readFile, rm, stat } from 'node:fs/promises'
-import { homedir } from 'node:os'
 import { join } from 'node:path'
 
 /** @param {string} path */
@@ -11,8 +10,11 @@ const exitIfEmpty = async path => {
   if (!stats || stats.size === 0) process.exit(0)
 }
 
-const WHISPER_MODEL_PATH = process.env.TALKIE_WHISPER_MODEL_PATH || join(homedir(), 'ggml-large-v3-turbo-q5_0.bin')
-const WHISPER_VAD_MODEL_PATH = process.env.TALKIE_WHISPER_VAD_MODEL_PATH || join(homedir(), 'ggml-silero-v6.2.0.bin')
+const WHISPER_MODEL_PATH = process.env.TALKIE_WHISPER_MODEL_PATH
+if (!WHISPER_MODEL_PATH) throw new Error('TALKIE_WHISPER_MODEL_PATH is not set')
+
+const WHISPER_VAD_MODEL_PATH = process.env.TALKIE_WHISPER_VAD_MODEL_PATH
+const LANGUAGE = process.env.TALKIE_LANGUAGE
 
 // YYYY-MM-DD-HH-mm-SS
 const operationId = new Date().toISOString().slice(0, 19).replaceAll(/\D/g, '-')
@@ -48,10 +50,15 @@ try {
       ['--file', recordingPath],
       '--no-prints',
       '--no-timestamps',
-      ['--language', 'auto'],
+      ['--language', LANGUAGE || 'auto'],
       '-sns',
-      '--vad',
-      ['-vm', WHISPER_VAD_MODEL_PATH],
+      ...(WHISPER_VAD_MODEL_PATH
+        ? [
+            //
+            '--vad',
+            ['-vm', WHISPER_VAD_MODEL_PATH],
+          ]
+        : []),
     ].flat(),
     { stdio: ['ignore', transcriptionFileHandle.fd, 'ignore'] },
   )
